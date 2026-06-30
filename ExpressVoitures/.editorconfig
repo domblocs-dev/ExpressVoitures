@@ -1,0 +1,7 @@
+root = true
+
+# Conventions de style pour le projet ExpressVoitures
+[*.cs]
+
+# Toujours utiliser les namespaces "file-scoped" (avec ; et sans accolades)
+csharp_style_namespace_declarations = file_scoped:warning
