@@ -1,4 +1,6 @@
-﻿namespace ExpressVoitures.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ExpressVoitures.Models;
 
 public class Vente
 {
@@ -20,4 +22,20 @@ public class Vente
     // Présentation
     public string? Description { get; set; }
     public string? PhotoUrl { get; set; }
+
+    // Statut calculé à partir des dates (non stocké en base)
+    [NotMapped]
+    public StatutVente Statut
+    {
+        get
+        {
+            if (DateVente is not null)
+                return StatutVente.Vendue;
+
+            if (DateDisponibilite is not null)
+                return StatutVente.Disponible;
+
+            return StatutVente.EnPreparation;
+        }
+    }
 }
