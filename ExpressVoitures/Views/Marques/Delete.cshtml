@@ -1,0 +1,17 @@
+﻿@model Marque
+
+@{
+    ViewData["Title"] = "Supprimer une marque";
+}
+
+<h1>Supprimer une marque</h1>
+<h3 class="text-danger">Voulez-vous vraiment supprimer cette marque ?</h3>
+<dl class="row">
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nom)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Nom)</dd>
+</dl>
+<form asp-action="Delete" asp-controller="Marques" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" asp-controller="Marques" class="btn btn-secondary">Annuler</a>
+</form>

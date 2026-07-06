@@ -1,0 +1,34 @@
+﻿@model List<Marque>
+
+@{
+    ViewData["Title"] = "Marques";
+}
+
+<h1>Marques</h1>
+
+<p>
+    <a asp-action="Create" asp-controller="Marques" class="btn btn-primary">Ajouter une marque</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var marque in Model)
+        {
+            <tr>
+                <td>@marque.Nom</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Marques" asp-route-id="@marque.Id" class="btn btn-primary btn-sm">Modifier</a>
+                    <a asp-action="Delete" asp-controller="Marques" asp-route-id="@marque.Id" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+   
+</table>
+
