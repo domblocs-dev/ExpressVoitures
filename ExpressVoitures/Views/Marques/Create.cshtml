@@ -1,17 +1,17 @@
 ﻿@model Marque
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Ajouter une marque";
 }
 
 <h1>Ajouter une marque</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" asp-controller="Marques" method="post">
     <div class="mb-3">
         <label asp-for="Nom" class="form-label"></label>
         <input asp-for="Nom" class="form-control" />
         <span asp-validation-for="Nom" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
-    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+    <a asp-action="Index" asp-controller="Marques" class="btn btn-secondary">Annuler</a>
 </form>
