@@ -13,6 +13,7 @@ public class MarquesController : Controller
         _context = context;
     }
 
+    // GET: /Marques
     public async Task<IActionResult> Index()
     {
         var marques = await _context.Marques.ToListAsync();

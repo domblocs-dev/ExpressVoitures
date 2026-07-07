@@ -1,0 +1,19 @@
+﻿@model Modele
+
+@{
+    ViewData["Title"] = "Supprimer un modèle";
+}
+
+<h1>Supprimer un modèle</h1>
+<h3 class="text-danger">Voulez-vous vraiment supprimer ce modèle ?</h3>
+<dl class="row">
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nom)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Nom)</dd>
+    <dt class="col-sm-2">Marque</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Marque.Nom)</dd>
+</dl>
+<form asp-action="Delete" asp-controller="Modeles" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" asp-controller="Modeles" class="btn btn-secondary">Annuler</a>
+</form>

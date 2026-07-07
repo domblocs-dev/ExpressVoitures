@@ -1,0 +1,23 @@
+﻿@model Modele
+
+@{
+    ViewData["Title"] = "Modifier un modèle";
+}
+
+<h1>Modifier un modèle</h1>
+
+<form asp-action="Edit" asp-controller="Modeles" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MarqueId" class="form-label">Marque</label>
+        <select asp-for="MarqueId" asp-items="ViewBag.MarqueId" class="form-select"></select>
+        <span asp-validation-for="MarqueId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" asp-controller="Modeles" class="btn btn-secondary">Annuler</a>
+</form>

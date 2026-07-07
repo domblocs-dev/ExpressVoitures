@@ -13,6 +13,7 @@ public class TypeReparationsController : Controller
         _context = context;
     }
 
+    // GET: /TypeReparations
     public async Task<IActionResult> Index()
     {
         var typeReparations = await _context.TypeReparations.ToListAsync();
