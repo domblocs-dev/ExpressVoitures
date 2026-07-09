@@ -23,6 +23,9 @@ public class Vente
     public string? Description { get; set; }
     public string? PhotoUrl { get; set; }
 
+    // Navigation vers les réparations de cette vente (relation 1 à plusieurs)
+    public List<Reparation> Reparations { get; set; } = new();
+
     // Statut calculé à partir des dates (non stocké en base)
     [NotMapped]
     public StatutVente Statut

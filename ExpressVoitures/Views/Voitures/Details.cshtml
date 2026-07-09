@@ -1,0 +1,80 @@
+﻿@model VoitureDetailsViewModel
+
+@{
+    ViewData["Title"] = "Détails de la voiture";
+    var voiture = Model.Voiture;
+    var vente = voiture.Vente;
+}
+
+<h1>Détails de la voiture</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Marque et modèle</dt>
+    <dd class="col-sm-9">@voiture.Modele.Marque.Nom @voiture.Modele.Nom</dd>
+
+    <dt class="col-sm-3">Année</dt>
+    <dd class="col-sm-9">@voiture.Annee</dd>
+
+    <dt class="col-sm-3">Finition</dt>
+    <dd class="col-sm-9">@voiture.Finition</dd>
+
+    <dt class="col-sm-3">Code VIN</dt>
+    <dd class="col-sm-9">@voiture.CodeVIN</dd>
+
+    <dt class="col-sm-3">Statut</dt>
+    <dd class="col-sm-9">@vente.Statut</dd>
+
+    <dt class="col-sm-3">Prix d'achat</dt>
+    <dd class="col-sm-9">@vente.PrixAchat €</dd>
+
+    <dt class="col-sm-3">Prix de vente</dt>
+    <dd class="col-sm-9">@vente.PrixVente €</dd>
+</dl>
+
+<h2>Réparations</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Coût</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reparation in vente.Reparations)
+        {
+            <tr>
+                <td>@reparation.TypeReparation.Libelle</td>
+                <td>@reparation.Cout €</td>
+                <td>
+                    <form asp-action="DeleteReparation" asp-controller="Voitures" method="post">
+                        <input type="hidden" name="reparationId" value="@reparation.Id" />
+                        <input type="hidden" name="voitureId" value="@voiture.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Ajouter une réparation</h3>
+<form asp-action="AddReparation" asp-controller="Voitures" method="post">
+    <input type="hidden" name="voitureId" value="@voiture.Id" />
+    <div class="mb-3">
+        <label asp-for="TypeReparationId" class="form-label">Type de réparation</label>
+        <select asp-for="TypeReparationId" asp-items="ViewBag.TypeReparationId" class="form-select">
+            <option value="">-- Choisir un type --</option>
+        </select>
+        <span asp-validation-for="TypeReparationId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Cout" class="form-label">Coût</label>
+        <input asp-for="Cout" class="form-control" />
+        <span asp-validation-for="Cout" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Ajouter la réparation</button>
+</form>
+
+<a asp-action="Index" asp-controller="Voitures" class="btn btn-secondary">Retour à l'inventaire</a>

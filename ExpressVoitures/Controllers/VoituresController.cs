@@ -70,9 +70,82 @@ public class VoituresController : Controller
         return View(form);
     }
 
+    // GET: /Voitures/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
+        var voiture = await ChargerVoitureAvecReparationsAsync(id.Value);
 
+        if (voiture == null)
+        {
+            return NotFound();
+        }
 
+        ViewData["TypeReparationId"] = new SelectList(_context.TypeReparations, "Id", "Libelle");
+        return View(new VoitureDetailsViewModel { Voiture = voiture });
+    }
+
+    // POST: /Voitures/AddReparation
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddReparation(int voitureId, VoitureDetailsViewModel form)
+    {
+        // La voiture (affichage) n'est pas postée par le formulaire : on l'exclut de la validation
+        ModelState.Remove(nameof(VoitureDetailsViewModel.Voiture));
+
+        var voiture = await ChargerVoitureAvecReparationsAsync(voitureId);
+        if (voiture == null)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            var reparation = new Reparation
+            {
+                TypeReparationId = form.TypeReparationId,
+                Cout = form.Cout
+            };
+
+            voiture.Vente.Reparations.Add(reparation); // EF insérera la réparation
+            RecalculerPrixVente(voiture.Vente);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = voitureId });
+        }
+
+        // saisie invalide : on ré-affiche la page Détails avec les messages d'erreur
+        form.Voiture = voiture;
+        ViewData["TypeReparationId"] = new SelectList(_context.TypeReparations, "Id", "Libelle");
+        return View(nameof(Details), form);
+    }
+
+    // POST: /Voitures/DeleteReparation
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteReparation(int reparationId, int voitureId)
+    {
+        var voiture = await ChargerVoitureAvecReparationsAsync(voitureId);
+        if (voiture == null)
+        {
+            return NotFound();
+        }
+
+        var reparation = voiture.Vente.Reparations.FirstOrDefault(r => r.Id == reparationId);
+        if (reparation != null)
+        {
+            voiture.Vente.Reparations.Remove(reparation);
+            _context.Reparations.Remove(reparation);
+            RecalculerPrixVente(voiture.Vente);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction(nameof(Details), new { id = voitureId });
+    }
 
 
 
@@ -87,6 +160,27 @@ public class VoituresController : Controller
             .ToListAsync();
 
         return new SelectList(modeles, "Id", "Libelle", selectedId);
+    }
+
+    // Charge une voiture avec son modèle, sa marque, sa vente et ses réparations
+    private async Task<Voiture?> ChargerVoitureAvecReparationsAsync(int id)
+    {
+        return await _context.Voitures
+            .Include(v => v.Modele)
+                .ThenInclude(m => m.Marque)
+            .Include(v => v.Vente)
+                .ThenInclude(vt => vt.Reparations)
+                    .ThenInclude(r => r.TypeReparation)
+            .FirstOrDefaultAsync(v => v.Id == id);
+    }
+
+    // Prix de vente = prix d'achat + somme des réparations + 500, tant que la voiture n'est pas vendue
+    private static void RecalculerPrixVente(Vente vente)
+    {
+        if (vente.DateVente is null)
+        {
+            vente.PrixVente = vente.PrixAchat + vente.Reparations.Sum(r => r.Cout) + 500m;
+        }
     }
 
 }

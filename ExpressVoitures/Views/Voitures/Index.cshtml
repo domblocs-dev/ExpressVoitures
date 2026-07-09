@@ -21,6 +21,7 @@
             <th>Statut</th>
             <th>Prix d'achat</th>
             <th>Prix de vente</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -31,8 +32,11 @@
                 <td>@voiture.Modele.Nom</td>
                 <td>@voiture.Annee</td>
                 <td>@voiture.Vente.Statut</td>
-                <td>@voiture.Vente.PrixAchat</td>
-                <td>@voiture.Vente.PrixVente</td>
+                <td>@voiture.Vente.PrixAchat €</td>
+                <td>@voiture.Vente.PrixVente €</td>
+                <td>
+                    <a asp-action="Details" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-primary btn-sm">Détails</a>
+                </td>
             </tr>
         }
     </tbody>
