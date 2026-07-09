@@ -14,6 +14,7 @@
     <thead>
         <tr>
             <th>Libelle</th>
+            <th>Coût par défaut</th>
             <th></th>
         </tr>
     </thead>
@@ -22,6 +23,7 @@
         {
             <tr>
                 <td>@typeReparation.Libelle</td>
+                <td>@typeReparation.CoutParDefaut €</td>
                 <td>
                     <a asp-action="Edit" asp-controller="TypeReparations" asp-route-id="@typeReparation.Id" class="btn btn-primary btn-sm">Modifier</a>
                     <a asp-action="Delete" asp-controller="TypeReparations" asp-route-id="@typeReparation.Id" class="btn btn-danger btn-sm">Supprimer</a>

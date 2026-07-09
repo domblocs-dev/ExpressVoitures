@@ -1,0 +1,23 @@
+﻿@model Voiture
+
+@{
+    ViewData["Title"] = "Supprimer une voiture";
+}
+
+<h1>Supprimer une voiture</h1>
+<h3 class="text-danger">Voulez-vous vraiment supprimer cette voiture ?</h3>
+
+<dl class="row">
+    <dt class="col-sm-3">Marque et modèle</dt>
+    <dd class="col-sm-9">@Model.Modele.Marque.Nom @Model.Modele.Nom</dd>
+    <dt class="col-sm-3">Année</dt>
+    <dd class="col-sm-9">@Model.Annee</dd>
+    <dt class="col-sm-3">Prix de vente</dt>
+    <dd class="col-sm-9">@Model.Vente.PrixVente €</dd>
+</dl>
+
+<form asp-action="Delete" asp-controller="Voitures" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" asp-controller="Voitures" class="btn btn-secondary">Annuler</a>
+</form>

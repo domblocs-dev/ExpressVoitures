@@ -21,30 +21,32 @@ public class ApplicationDbContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-            base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder);
 
-            // Unicité des référentiels
-            modelBuilder.Entity<Marque>()
-                .HasIndex(m => m.Nom)
-                .IsUnique();
+        // Unicité des référentiels
+        modelBuilder.Entity<Marque>()
+            .HasIndex(m => m.Nom)
+            .IsUnique();
 
-            modelBuilder.Entity<Modele>()
-                .HasIndex(m => new { m.MarqueId, m.Nom })
-                .IsUnique();
+        modelBuilder.Entity<Modele>()
+            .HasIndex(m => new { m.MarqueId, m.Nom })
+            .IsUnique();
 
-            modelBuilder.Entity<TypeReparation>()
-                .HasIndex(t => t.Libelle)
-                .IsUnique();
+        modelBuilder.Entity<TypeReparation>()
+            .HasIndex(t => t.Libelle)
+            .IsUnique();
 
-            // Relation 1 à 1 : une voiture donne lieu à au plus une vente
-            modelBuilder.Entity<Vente>()
-                .HasIndex(v => v.VoitureId)
-                .IsUnique();
+        // Relation 1 à 1 : une voiture donne lieu à au plus une vente
+        modelBuilder.Entity<Vente>()
+            .HasIndex(v => v.VoitureId)
+            .IsUnique();
 
-            // Précision des montants : decimal(18,2)
-            modelBuilder.Entity<Vente>().Property(v => v.PrixAchat).HasPrecision(18, 2);
-            modelBuilder.Entity<Vente>().Property(v => v.PrixVente).HasPrecision(18, 2);
-            modelBuilder.Entity<Reparation>().Property(r => r.Cout).HasPrecision(18, 2);
+
+        // Précision des montants : decimal(18,2)
+        modelBuilder.Entity<Vente>().Property(v => v.PrixAchat).HasPrecision(18, 2);
+        modelBuilder.Entity<Vente>().Property(v => v.PrixVente).HasPrecision(18, 2);
+        modelBuilder.Entity<Reparation>().Property(r => r.Cout).HasPrecision(18, 2);
+        modelBuilder.Entity<TypeReparation>().Property(t => t.CoutParDefaut).HasPrecision(18, 2);
 
     }
 

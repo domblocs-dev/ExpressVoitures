@@ -35,8 +35,11 @@
                 <td>@voiture.Vente.PrixAchat €</td>
                 <td>@voiture.Vente.PrixVente €</td>
                 <td>
-                    <a asp-action="Details" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-primary btn-sm">Détails</a>
+                    <a asp-action="Details" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-primary btn-sm">Gérer les réparations</a>
+                    <a asp-action="Edit" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-secondary btn-sm">Modifier</a>
+                    <a asp-action="Delete" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-danger btn-sm">Supprimer</a>
                 </td>
+
             </tr>
         }
     </tbody>

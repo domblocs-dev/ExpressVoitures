@@ -4,6 +4,8 @@ namespace ExpressVoitures.ViewModels;
 
 public class VoitureFormViewModel : IValidatableObject
 {
+    public int Id { get; set; }
+
     // --- Voiture ---
     [Range(1, int.MaxValue, ErrorMessage = "Veuillez choisir un modèle.")]
     public int ModeleId { get; set; }
@@ -35,6 +37,7 @@ public class VoitureFormViewModel : IValidatableObject
 
     [Display(Name = "URL de la photo")]
     public string? PhotoUrl { get; set; }
+
 
     // Règle métier : année entre 1990 et l'année courante (jamais dans le futur)
 
