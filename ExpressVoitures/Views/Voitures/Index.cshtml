@@ -1,0 +1,43 @@
+﻿@model List<Voiture>
+
+@{
+    ViewData["Title"] = "Inventaire des voitures";
+}
+
+
+<h1>Inventaire des voitures</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter une voiture</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Marque</th>
+            <th>Modèle</th>
+            <th>Année</th>
+            <th>Statut</th>
+            <th>Prix d'achat</th>
+            <th>Prix de vente</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var voiture in Model)
+        {
+            <tr>
+                <td>@voiture.Modele.Marque.Nom</td>
+                <td>@voiture.Modele.Nom</td>
+                <td>@voiture.Annee</td>
+                <td>@voiture.Vente.Statut</td>
+                <td>@voiture.Vente.PrixAchat</td>
+                <td>@voiture.Vente.PrixVente</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+

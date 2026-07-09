@@ -1,6 +1,4 @@
-﻿using ExpressVoitures.Data;
-using ExpressVoitures.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Controllers;

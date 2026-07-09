@@ -14,4 +14,6 @@ public class Voiture
     // Clé étrangère + navigation vers le modèle
     public int ModeleId { get; set; }
     public Modele Modele { get; set; } = null!;
+    // Navigation inverse vers la vente (relation 1 à 1)
+    public Vente Vente { get; set; } = null!;
 }

@@ -1,0 +1,67 @@
+﻿@model VoitureFormViewModel
+
+@{
+    ViewData["Title"] = "Ajouter une voiture";
+}
+
+<h1>Ajouter une voiture</h1>
+
+<form asp-action="Create" asp-controller="Voitures" method="post">
+
+    <h4>Voiture</h4>
+    <div class="mb-3">
+        <label asp-for="ModeleId" class="form-label">Modèle</label>
+        <select asp-for="ModeleId" asp-items="ViewBag.ModeleId" class="form-select">
+            <option value="">-- Choisir un modèle --</option>
+        </select>
+        <span asp-validation-for="ModeleId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Annee" class="form-label">Année</label>
+        <input asp-for="Annee" class="form-control" />
+        <span asp-validation-for="Annee" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CodeVIN" class="form-label">Code VIN</label>
+        <input asp-for="CodeVIN" class="form-control" />
+        <span asp-validation-for="CodeVIN" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Finition" class="form-label">Finition</label>
+        <input asp-for="Finition" class="form-control" />
+        <span asp-validation-for="Finition" class="text-danger"></span>
+    </div>
+    <h4>Vente</h4>
+    <div class="mb-3">
+        <label asp-for="PrixAchat" class="form-label">Prix d'achat</label>
+        <input asp-for="PrixAchat" class="form-control" />
+        <span asp-validation-for="PrixAchat" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateAchat" class="form-label">Date d'achat</label>
+        <input asp-for="DateAchat" class="form-control" />
+        <span asp-validation-for="DateAchat" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateDisponibilite" class="form-label">Date de disponibilité</label>
+        <input asp-for="DateDisponibilite" class="form-control" />
+        <span asp-validation-for="DateDisponibilite" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateVente" class="form-label">Date de vente</label>
+        <input asp-for="DateVente" class="form-control" />
+        <span asp-validation-for="DateVente" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PhotoUrl" class="form-label">URL de la photo</label>
+        <input asp-for="PhotoUrl" class="form-control" />
+        <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" asp-controller="Voitures" class="btn btn-secondary">Annuler</a>
+</form>
