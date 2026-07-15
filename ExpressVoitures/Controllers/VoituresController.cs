@@ -102,6 +102,11 @@ public class VoituresController : Controller
         {
             return NotFound();
         }
+        // Vente finalisée : les réparations ne sont plus modifiables
+        if (voiture.Vente.DateVente is not null)
+        {
+            return RedirectToAction(nameof(Details), new { id = voitureId });
+        }
 
         if (ModelState.IsValid)
         {
@@ -141,6 +146,12 @@ public class VoituresController : Controller
             return NotFound();
         }
 
+        // Vente finalisée : les réparations ne sont plus modifiables
+        if (voiture.Vente.DateVente is not null)
+        {
+            return RedirectToAction(nameof(Details), new { id = voitureId });
+        }
+
         var reparation = voiture.Vente.Reparations.FirstOrDefault(r => r.Id == reparationId);
         if (reparation != null)
         {
@@ -162,6 +173,12 @@ public class VoituresController : Controller
         if (voiture == null)
         {
             return NotFound();
+        }
+
+        // Vente finalisée : les réparations ne sont plus modifiables
+        if (voiture.Vente.DateVente is not null)
+        {
+            return RedirectToAction(nameof(Details), new { id = voitureId });
         }
 
         var reparation = voiture.Vente.Reparations.FirstOrDefault(r => r.Id == reparationId);
@@ -254,8 +271,9 @@ public class VoituresController : Controller
         vente.Description = form.Description;
         vente.PhotoUrl = form.PhotoUrl;
 
-        // Recalcul du prix, sauf si la voiture était DÉJÀ vendue avant cette modif (prix figé)
-        if (!etaitVendue)
+        // Le prix n'est figé que si la voiture était vendue ET le reste après cette modif
+        bool resteVendue = etaitVendue && vente.DateVente is not null;
+        if (!resteVendue)
         {
             vente.PrixVente = vente.PrixAchat + vente.Reparations.Sum(r => r.Cout) + 500m;
         }
@@ -307,7 +325,7 @@ public class VoituresController : Controller
     }
 
 
-
+    // -------------------------------------------------------------------
 
     // Prépare la liste déroulante des modèles, affichés « Marque Modèle »
     private async Task<SelectList> GetModelesSelectListAsync(int? selectedId = null)

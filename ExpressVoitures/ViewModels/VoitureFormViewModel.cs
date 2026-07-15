@@ -58,6 +58,46 @@ public class VoitureFormViewModel : IValidatableObject
                 "La date d'achat ne peut pas être dans le futur.",
                 new[] { nameof(DateAchat) });
         }
+
+        if (DateDisponibilite is not null && DateDisponibilite > aujourdHui)
+        {
+            yield return new ValidationResult(
+                "La date de disponibilité ne peut pas être dans le futur.",
+                new[] { nameof(DateDisponibilite) });
+        }
+
+        if (DateVente is not null && DateVente > aujourdHui)
+        {
+            yield return new ValidationResult(
+                "La date de vente ne peut pas être dans le futur.",
+                new[] { nameof(DateVente) });
+        }
+
+        // Cohérence des dates entre elles
+        if (DateDisponibilite is not null && DateDisponibilite < DateAchat)
+        {
+            yield return new ValidationResult(
+                "La date de disponibilité ne peut pas être antérieure à la date d'achat.",
+                new[] { nameof(DateDisponibilite) });
+        }
+
+        if (DateVente is not null && DateVente < DateAchat)
+        {
+            yield return new ValidationResult(
+                "La date de vente ne peut pas être antérieure à la date d'achat.",
+                new[] { nameof(DateVente) });
+        }
+
+        if (DateDisponibilite is not null && DateVente is not null && DateDisponibilite > DateVente)
+        {
+            yield return new ValidationResult(
+                "La date de disponibilité ne peut pas être postérieure à la date de vente.",
+                new[] { nameof(DateDisponibilite) });
+        }
+
+        // -------------------
+
     }
+
 
 }

@@ -8,7 +8,7 @@
 <h1>Inventaire des voitures</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Ajouter une voiture</a>
+    <a asp-action="Create" asp-controller="Voitures" class="btn btn-primary">Ajouter une voiture</a>
 </p>
 
 
@@ -31,7 +31,7 @@
                 <td>@voiture.Modele.Marque.Nom</td>
                 <td>@voiture.Modele.Nom</td>
                 <td>@voiture.Annee</td>
-                <td>@voiture.Vente.Statut</td>
+                <td>@voiture.Vente.Statut.EnFrancais()</td>
                 <td>@voiture.Vente.PrixAchat €</td>
                 <td>@voiture.Vente.PrixVente €</td>
                 <td>
