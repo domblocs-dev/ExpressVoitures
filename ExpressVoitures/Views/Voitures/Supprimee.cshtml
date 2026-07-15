@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Voiture supprimée";
+    var libelle = TempData["VoitureSupprimee"] as string;
+}
+
+<h1 class="ev-titre-page">@(libelle ?? "La voiture")</h1>
+<p class="text-center">a bien été supprimée.</p>
+
+<p class="text-center mt-4">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-ev">Retour à l'accueil</a>
+</p>

@@ -20,3 +20,83 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* ===================== Charte Express Voitures ===================== */
+:root {
+    --ev-ambre: #D8A862; /* fond des boutons (maquette) */
+    --ev-ambre-hover: #C6924A;
+    --ev-ambre-texte: #8A5A2B; /* variante foncée pour le TEXTE (contraste WCAG AA) */
+    --ev-fonce: #2B170F; /* titres et texte */
+}
+
+body {
+    color: var(--ev-fonce);
+}
+
+/* Titres en serif, comme la maquette */
+h1, h2, h3, .navbar-brand {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ev-fonce);
+}
+
+/* Titre de page : serif italique, centré (« Nos voitures », « Merci ! ») */
+.ev-titre-page {
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* Barre de navigation : fond blanc, texte foncé */
+.navbar {
+    background-color: #fff;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.navbar .nav-link {
+    color: var(--ev-fonce);
+}
+
+    .navbar .nav-link.active {
+        font-weight: 700; /* la maquette met le lien courant en gras */
+    }
+
+/* Bouton principal (CTA ambre de la maquette) */
+.btn-ev {
+    background-color: var(--ev-ambre);
+    border: 1px solid var(--ev-ambre);
+    color: var(--ev-fonce);
+}
+
+    .btn-ev:hover, .btn-ev:focus {
+        background-color: var(--ev-ambre-hover);
+        border-color: var(--ev-ambre-hover);
+        color: var(--ev-fonce);
+    }
+
+/* Caractéristiques d'une voiture (Année, Marque, Modèle, Finition) */
+.ev-carac {
+    color: var(--ev-ambre-texte);
+    margin-bottom: 8px;
+}
+
+/* Vignette d'une carte voiture */
+.ev-vignette {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    flex: 0 0 auto;
+}
+
+.ev-vignette-vide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F1ECE7;
+    color: var(--ev-ambre-texte);
+    font-size: 0.85rem;
+    text-align: center;
+}
+

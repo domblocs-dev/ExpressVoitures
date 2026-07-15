@@ -1,9 +1,47 @@
-﻿@{
+﻿@model List<Voiture>
+
+@{
     ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Express Voitures</h1>
-    <p class="lead">Gestion du stock de voitures d'occasion.</p>
-    <a asp-controller="Voitures" asp-action="Index" class="btn btn-primary btn-lg">Voir l'inventaire</a>
+<h1 class="ev-titre-page">Nos voitures</h1>
+
+<p class="text-center">
+    <a asp-controller="Voitures" asp-action="Create" class="btn btn-ev">+ Ajouter une voiture</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p class="text-center">Aucune voiture au catalogue pour le moment.</p>
+}
+
+<div class="row">
+    @foreach (var voiture in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <article class="d-flex gap-3">
+                <a asp-controller="Voitures" asp-action="Details" asp-route-id="@voiture.Id">
+                    @if (!string.IsNullOrWhiteSpace(voiture.Vente.PhotoUrl))
+                    {
+                        <img src="@voiture.Vente.PhotoUrl" class="ev-vignette"
+                             alt="@voiture.Modele.Marque.Nom @voiture.Modele.Nom @voiture.Annee" />
+                    }
+                    else
+                    {
+                        <span class="ev-vignette ev-vignette-vide">Photo à venir</span>
+                    }
+                </a>
+                <div>
+                    <h2 class="h4">@voiture.Vente.PrixVente €</h2>
+                    <p class="ev-carac">@voiture.Annee</p>
+                    <p class="ev-carac">@voiture.Modele.Marque.Nom</p>
+                    <p class="ev-carac">@voiture.Modele.Nom</p>
+                    @if (!string.IsNullOrWhiteSpace(voiture.Finition))
+                    {
+                        <p class="ev-carac">@voiture.Finition</p>
+                    }
+                </div>
+            </article>
+        </div>
+    }
 </div>

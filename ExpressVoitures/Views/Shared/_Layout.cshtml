@@ -9,27 +9,36 @@
     <link rel="stylesheet" href="~/ExpressVoitures.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        var ctrl = ViewContext.RouteData.Values["controller"]?.ToString();
+        var act = ViewContext.RouteData.Values["action"]?.ToString();
+    }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light border-bottom mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ExpressVoitures</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Express Voitures</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Afficher ou masquer la navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1"></ul>
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Voitures" asp-action="Index">Inventaire</a>
+                            <a class="nav-link @(ctrl == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Marques" asp-action="Index">Marques</a>
+                            <a class="nav-link @(ctrl == "Voitures" && act == "Create" ? "active" : "")" asp-controller="Voitures" asp-action="Create">Ajouter une voiture</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Modeles" asp-action="Index">Modèles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="TypeReparations" asp-action="Index">Types de réparation</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gestion</a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" asp-controller="Voitures" asp-action="Index">Inventaire</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Marques" asp-action="Index">Marques</a></li>
+                                <li><a class="dropdown-item" asp-controller="Modeles" asp-action="Index">Modèles</a></li>
+                                <li><a class="dropdown-item" asp-controller="TypeReparations" asp-action="Index">Types de réparation</a></li>
+                            </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -45,7 +54,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - ExpressVoitures - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Express Voitures
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

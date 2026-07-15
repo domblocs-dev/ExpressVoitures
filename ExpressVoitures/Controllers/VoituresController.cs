@@ -8,10 +8,12 @@ namespace ExpressVoitures.Controllers;
 public class VoituresController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IWebHostEnvironment _environment;
 
-    public VoituresController(ApplicationDbContext context)
+    public VoituresController(ApplicationDbContext context, IWebHostEnvironment environment)
     {
         _context = context;
+        _environment = environment;
     }
 
     // GET: /Voitures
@@ -40,8 +42,18 @@ public class VoituresController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(VoitureFormViewModel form)
     {
+        if (form.Photo is not null)
+        {
+            PhotoEstValide(form.Photo);   // ajoute l'erreur au ModelState si besoin
+        }
+
         if (ModelState.IsValid)
         {
+            string? photoUrl = null;
+            if (form.Photo is not null)
+            {
+                photoUrl = await EnregistrerPhotoAsync(form.Photo);
+            }
             var voiture = new Voiture
             {
                 Annee = form.Annee,
@@ -55,7 +67,7 @@ public class VoituresController : Controller
                     DateDisponibilite = form.DateDisponibilite,
                     DateVente = form.DateVente,
                     Description = form.Description,
-                    PhotoUrl = form.PhotoUrl,
+                    PhotoUrl = photoUrl,
                     // Prix de vente = prix d'achat + 500 (aucune réparation pour l'instant)
                     PrixVente = form.PrixAchat + 500m
                 }
@@ -63,7 +75,7 @@ public class VoituresController : Controller
 
             _context.Add(voiture);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Publiee));   // au lieu de nameof(Index)
         }
 
         ViewData["ModeleId"] = await GetModelesSelectListAsync(form.ModeleId);
@@ -239,8 +251,19 @@ public class VoituresController : Controller
             return NotFound();
         }
 
+        if (form.Photo is not null)
+        {
+            PhotoEstValide(form.Photo);
+        }
+
         if (!ModelState.IsValid)
         {
+            // on recharge la photo actuelle, pour que l'aperçu ne disparaisse pas
+            form.PhotoUrl = await _context.Ventes
+                .Where(v => v.VoitureId == id)
+                .Select(v => v.PhotoUrl)
+                .FirstOrDefaultAsync();
+
             ViewData["ModeleId"] = await GetModelesSelectListAsync(form.ModeleId);
             return View(form);
         }
@@ -270,6 +293,11 @@ public class VoituresController : Controller
         vente.DateVente = form.DateVente;
         vente.Description = form.Description;
         vente.PhotoUrl = form.PhotoUrl;
+        // Photo : on ne remplace que si une nouvelle image a été envoyée
+        if (form.Photo is not null)
+        {
+            vente.PhotoUrl = await EnregistrerPhotoAsync(form.Photo);
+        }
 
         // Le prix n'est figé que si la voiture était vendue ET le reste après cette modif
         bool resteVendue = etaitVendue && vente.DateVente is not null;
@@ -308,20 +336,32 @@ public class VoituresController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var voiture = await _context.Voitures
-            .Include(v => v.Vente)
-                .ThenInclude(vt => vt.Reparations)
-            .FirstOrDefaultAsync(v => v.Id == id);
+        var voiture = await ChargerVoitureAvecReparationsAsync(id);
 
         if (voiture != null)
         {
+            // on capture le libellé AVANT de supprimer
+            TempData["VoitureSupprimee"] = $"{voiture.Annee} {voiture.Modele.Marque.Nom} {voiture.Modele.Nom}";
+
             _context.Reparations.RemoveRange(voiture.Vente.Reparations);
             _context.Ventes.Remove(voiture.Vente);
             _context.Voitures.Remove(voiture);
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Supprimee));
+    }
+
+    // GET: /Voitures/Publiee
+    public IActionResult Publiee()
+    {
+        return View();
+    }
+
+    // GET: /Voitures/Supprimee
+    public IActionResult Supprimee()
+    {
+        return View();
     }
 
 
@@ -358,6 +398,52 @@ public class VoituresController : Controller
         {
             vente.PrixVente = vente.PrixAchat + vente.Reparations.Sum(r => r.Cout) + 500m;
         }
+    }
+
+    // --- Téléversement des photos ---
+    private static readonly string[] ExtensionsAutorisees = { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+    private const long TailleMaxOctets = 5 * 1024 * 1024;   // 5 Mo
+
+    // Vérifie le fichier reçu ; ajoute une erreur au ModelState s'il est invalide
+    private bool PhotoEstValide(IFormFile photo)
+    {
+        var extension = Path.GetExtension(photo.FileName).ToLowerInvariant();
+
+        if (!ExtensionsAutorisees.Contains(extension))
+        {
+            ModelState.AddModelError(nameof(VoitureFormViewModel.Photo),
+                "Format non autorisé. Formats acceptés : JPG, PNG, WEBP.");
+            return false;
+        }
+        if (!photo.ContentType.StartsWith("image/"))
+        {
+            ModelState.AddModelError(nameof(VoitureFormViewModel.Photo),
+                "Le fichier envoyé n'est pas une image.");
+            return false;
+        }
+        if (photo.Length > TailleMaxOctets)
+        {
+            ModelState.AddModelError(nameof(VoitureFormViewModel.Photo),
+                "L'image ne doit pas dépasser 5 Mo.");
+            return false;
+        }
+        return true;
+    }
+
+    // Enregistre la photo sous un nom généré, et renvoie son chemin web
+    private async Task<string> EnregistrerPhotoAsync(IFormFile photo)
+    {
+        var extension = Path.GetExtension(photo.FileName).ToLowerInvariant();
+        var nomFichier = $"{Guid.NewGuid()}{extension}";      // on n'utilise JAMAIS le nom fourni
+
+        var dossier = Path.Combine(_environment.WebRootPath, "images", "voitures");
+        Directory.CreateDirectory(dossier);
+
+        var cheminComplet = Path.Combine(dossier, nomFichier);
+        using var flux = new FileStream(cheminComplet, FileMode.Create);
+        await photo.CopyToAsync(flux);
+
+        return "/images/voitures/" + nomFichier;   // utilisable directement dans <img src="...">
     }
 
 }

@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Photos de voitures televersees : contenu d'execution, pas du code source
+ExpressVoitures/wwwroot/images/voitures/

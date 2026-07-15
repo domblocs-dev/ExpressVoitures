@@ -38,6 +38,9 @@ public class VoitureFormViewModel : IValidatableObject
     [Display(Name = "URL de la photo")]
     public string? PhotoUrl { get; set; }
 
+    [Display(Name = "Visuel")]
+    public IFormFile? Photo { get; set; }
+
 
     // Règle métier : année entre 1990 et l'année courante (jamais dans le futur)
 
