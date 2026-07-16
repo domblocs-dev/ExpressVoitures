@@ -33,6 +33,15 @@
                 </a>
                 <div>
                     <h2 class="h4">@voiture.Vente.PrixVente €</h2>
+                    @{
+                        var badge = voiture.Vente.Statut switch
+                        {
+                            StatutVente.Vendue => "bg-dark",
+                            StatutVente.Disponible => "bg-success",
+                            _ => "bg-warning text-dark"
+                        };
+                    }
+                    <p><span class="badge @badge">@voiture.Vente.Statut.EnFrancais()</span></p>
                     <p class="ev-carac">@voiture.Annee</p>
                     <p class="ev-carac">@voiture.Modele.Marque.Nom</p>
                     <p class="ev-carac">@voiture.Modele.Nom</p>

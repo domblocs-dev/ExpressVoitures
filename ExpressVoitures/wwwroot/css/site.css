@@ -100,3 +100,42 @@ h1, h2, h3, .navbar-brand {
     text-align: center;
 }
 
+/* Bouton secondaire : contour ambre (Annuler, Retour) */
+.btn-ev-outline {
+    background-color: transparent;
+    border: 1px solid var(--ev-ambre-texte);
+    color: var(--ev-ambre-texte);
+}
+
+    .btn-ev-outline:hover, .btn-ev-outline:focus {
+        background-color: var(--ev-ambre-texte);
+        border-color: var(--ev-ambre-texte);
+        color: #fff;
+    }
+
+/* Harmoniser les boutons Bootstrap par défaut avec la charte */
+.btn-primary {
+    background-color: var(--ev-ambre);
+    border-color: var(--ev-ambre);
+    color: var(--ev-fonce);
+}
+
+    .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+        background-color: var(--ev-ambre-hover);
+        border-color: var(--ev-ambre-hover);
+        color: var(--ev-fonce);
+    }
+
+.btn-secondary {
+    background-color: transparent;
+    border-color: var(--ev-ambre-texte);
+    color: var(--ev-ambre-texte);
+}
+
+    .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+        background-color: var(--ev-ambre-texte);
+        border-color: var(--ev-ambre-texte);
+        color: #fff;
+    }
+
+

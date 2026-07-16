@@ -26,6 +26,7 @@ builder.Services.AddControllersWithViews(options =>
     p.SetMissingBindRequiredValueAccessor(field => $"La valeur du champ « {field} » est manquante.");
     p.SetUnknownValueIsInvalidAccessor(field => $"La valeur fournie pour « {field} » n'est pas valide.");
     p.SetNonPropertyValueMustBeANumberAccessor(() => "La valeur doit être un nombre.");
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
 });
 
 var app = builder.Build();

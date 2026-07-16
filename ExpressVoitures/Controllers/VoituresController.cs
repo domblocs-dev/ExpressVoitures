@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ExpressVoitures.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 
 namespace ExpressVoitures.Controllers;
 
@@ -179,7 +180,7 @@ public class VoituresController : Controller
     // POST: /Voitures/UpdateReparation
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateReparation(int reparationId, int voitureId, decimal cout)
+    public async Task<IActionResult> UpdateReparation(int reparationId, int voitureId, string cout)
     {
         var voiture = await ChargerVoitureAvecReparationsAsync(voitureId);
         if (voiture == null)
@@ -194,9 +195,14 @@ public class VoituresController : Controller
         }
 
         var reparation = voiture.Vente.Reparations.FirstOrDefault(r => r.Id == reparationId);
-        if (reparation != null && cout >= 0)
+
+        // On accepte le point ET la virgule ; on n'écrase QUE si la conversion réussit
+        if (reparation != null
+            && decimal.TryParse((cout ?? "").Replace(',', '.'),
+                                 NumberStyles.Number, CultureInfo.InvariantCulture, out var valeur)
+            && valeur >= 0)
         {
-            reparation.Cout = cout;
+            reparation.Cout = valeur;
             RecalculerPrixVente(voiture.Vente);
             await _context.SaveChangesAsync();
         }
@@ -292,7 +298,7 @@ public class VoituresController : Controller
         vente.DateDisponibilite = form.DateDisponibilite;
         vente.DateVente = form.DateVente;
         vente.Description = form.Description;
-        vente.PhotoUrl = form.PhotoUrl;
+        // vente.PhotoUrl = form.PhotoUrl;
         // Photo : on ne remplace que si une nouvelle image a été envoyée
         if (form.Photo is not null)
         {
@@ -307,7 +313,7 @@ public class VoituresController : Controller
         }
 
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Details), new { id = form.Id });
     }
 
     // GET: /Voitures/Delete/5

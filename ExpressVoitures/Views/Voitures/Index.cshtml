@@ -8,7 +8,7 @@
 <h1>Inventaire des voitures</h1>
 
 <p>
-    <a asp-action="Create" asp-controller="Voitures" class="btn btn-primary">Ajouter une voiture</a>
+    <a asp-action="Create" asp-controller="Voitures" class="btn btn-ev">Ajouter une voiture</a>
 </p>
 
 
@@ -35,9 +35,9 @@
                 <td>@voiture.Vente.PrixAchat €</td>
                 <td>@voiture.Vente.PrixVente €</td>
                 <td>
-                    <a asp-action="Details" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-primary btn-sm">Gérer les réparations</a>
-                    <a asp-action="Edit" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-secondary btn-sm">Modifier</a>
-                    <a asp-action="Delete" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-danger btn-sm">Supprimer</a>
+                    <a asp-action="Details" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-ev btn-sm">Gérer les réparations</a>
+                    <a asp-action="Edit" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-ev-outline btn-sm">Modifier</a>
+                    <a asp-action="Delete" asp-controller="Voitures" asp-route-id="@voiture.Id" class="btn btn-outline-danger btn-sm">Supprimer</a>
                 </td>
 
             </tr>
