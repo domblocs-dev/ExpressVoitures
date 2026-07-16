@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using ExpressVoitures.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressVoitures.Controllers;
 
+[Authorize(Roles = Roles.Gerant)]
 public class VoituresController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -84,6 +86,7 @@ public class VoituresController : Controller
     }
 
     // GET: /Voitures/Details/5
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)

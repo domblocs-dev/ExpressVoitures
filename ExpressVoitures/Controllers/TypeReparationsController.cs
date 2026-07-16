@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace ExpressVoitures.Controllers;
 
+[Authorize(Roles = Roles.Gerant)]
 public class TypeReparationsController : Controller
 {
     private readonly ApplicationDbContext _context;

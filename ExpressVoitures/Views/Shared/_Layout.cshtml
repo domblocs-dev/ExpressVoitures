@@ -22,23 +22,27 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1"></ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link @(ctrl == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Accueil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ctrl == "Voitures" && act == "Create" ? "active" : "")" asp-controller="Voitures" asp-action="Create">Ajouter une voiture</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gestion</a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" asp-controller="Voitures" asp-action="Index">Inventaire</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Marques" asp-action="Index">Marques</a></li>
-                                <li><a class="dropdown-item" asp-controller="Modeles" asp-action="Index">Modèles</a></li>
-                                <li><a class="dropdown-item" asp-controller="TypeReparations" asp-action="Index">Types de réparation</a></li>
-                            </ul>
+                        @if (User.IsInRole(Roles.Gerant))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ctrl == "Voitures" && act == "Create" ? "active" : "")" asp-controller="Voitures" asp-action="Create">Ajouter une voiture</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Gestion</a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-controller="Voitures" asp-action="Index">Inventaire</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Marques" asp-action="Index">Marques</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Modeles" asp-action="Index">Modèles</a></li>
+                                    <li><a class="dropdown-item" asp-controller="TypeReparations" asp-action="Index">Types de réparation</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

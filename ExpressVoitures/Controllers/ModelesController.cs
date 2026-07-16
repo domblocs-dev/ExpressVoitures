@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; // Add this using directive for SelectList
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressVoitures.Controllers;
 
+[Authorize(Roles = Roles.Gerant)]
 public class ModelesController : Controller
 {
     private readonly ApplicationDbContext _context;

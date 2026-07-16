@@ -25,11 +25,14 @@
     </div>
 
     <div class="col-md-6">
-        <p class="mb-1">Vous avez publié cette annonce, vous pouvez la :</p>
-        <p>
-            <a asp-controller="Voitures" asp-action="Edit" asp-route-id="@voiture.Id">modifier</a>
-            <a asp-controller="Voitures" asp-action="Delete" asp-route-id="@voiture.Id" class="text-danger ms-3">supprimer</a>
-        </p>
+        @if (User.IsInRole(Roles.Gerant))
+        {
+            <p class="mb-1">Vous avez publié cette annonce, vous pouvez la :</p>
+            <p>
+                <a asp-controller="Voitures" asp-action="Edit" asp-route-id="@voiture.Id">modifier</a>
+                <a asp-controller="Voitures" asp-action="Delete" asp-route-id="@voiture.Id" class="text-danger ms-3">supprimer</a>
+            </p>
+        }
 
         <h1 class="mt-4">@vente.PrixVente €</h1>
 
@@ -49,6 +52,8 @@
     </div>
 </div>
 
+@if (User.IsInRole(Roles.Gerant))
+{
 <h2>Réparations</h2>
 
 <table class="table">
@@ -120,4 +125,5 @@ else
     <div class="mt-3">
         <a asp-controller="Voitures" asp-action="Index" class="btn btn-ev-outline">Retour à l'inventaire</a>
     </div>
+}
 }

@@ -70,7 +70,10 @@
 
             <div class="mb-3">
                 <label asp-for="Photo" class="form-label">Visuel</label>
-                <input asp-for="Photo" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif" />
+                <div class="mb-2">
+                    <img id="apercuPhoto" alt="Aperçu de l'image choisie" class="ev-vignette" style="display: none;" />
+                </div>
+                <input asp-for="Photo" type="file" data-apercu="apercuPhoto" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif" />
                 <div class="form-text">Formats acceptés : JPG, PNG, WEBP, GIF. Taille maximale : 5 Mo.</div>
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
@@ -88,4 +91,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/validation-fr.js" asp-append-version="true"></script>
+    <script src="~/js/apercu-image.js" asp-append-version="true"></script>
 }

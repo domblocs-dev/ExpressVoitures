@@ -69,13 +69,11 @@
 
             <div class="mb-3">
                 <label asp-for="Photo" class="form-label">Visuel</label>
-                @if (!string.IsNullOrWhiteSpace(Model.PhotoUrl))
-                {
-                    <div class="mb-2">
-                        <img src="@Model.PhotoUrl" alt="Photo actuelle de la voiture" class="ev-vignette" />
-                    </div>
-                }
-                <input asp-for="Photo" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif" />
+                <div class="mb-2">
+                    <img id="apercuPhoto" src="@Model.PhotoUrl" alt="Aperçu de la voiture" class="ev-vignette"
+                         style="@(string.IsNullOrWhiteSpace(Model.PhotoUrl) ? "display: none;" : "")" />
+                </div>
+                <input asp-for="Photo" type="file" data-apercu="apercuPhoto" class="form-control" accept=".jpg,.jpeg,.png,.webp,.gif" />
                 <div class="form-text">Laissez vide pour conserver la photo actuelle. Formats : JPG, PNG, WEBP, GIF. Taille maximale : 5 Mo.</div>
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
@@ -100,4 +98,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/validation-fr.js" asp-append-version="true"></script>
+    <script src="~/js/apercu-image.js" asp-append-version="true"></script>
 }

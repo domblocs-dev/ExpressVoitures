@@ -6,9 +6,12 @@
 
 <h1 class="ev-titre-page">Nos voitures</h1>
 
-<p class="text-center">
-    <a asp-controller="Voitures" asp-action="Create" class="btn btn-ev">+ Ajouter une voiture</a>
-</p>
+@if (User.IsInRole(Roles.Gerant))
+{
+    <p class="text-center">
+        <a asp-controller="Voitures" asp-action="Create" class="btn btn-ev">+ Ajouter une voiture</a>
+    </p>
+}
 
 @if (!Model.Any())
 {

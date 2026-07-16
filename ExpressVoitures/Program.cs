@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using ExpressVoitures.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews(options =>
 {
@@ -27,6 +29,12 @@ builder.Services.AddControllersWithViews(options =>
     p.SetUnknownValueIsInvalidAccessor(field => $"La valeur fournie pour « {field} » n'est pas valide.");
     p.SetNonPropertyValueMustBeANumberAccessor(() => "La valeur doit être un nombre.");
     options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+});
+
+builder.Services.AddRazorPages(options =>
+{
+    // L'inscription est réservée aux personnes authentifiées (le public ne peut pas créer de compte)
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Register");
 });
 
 var app = builder.Build();
@@ -62,5 +70,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+using (var scope = app.Services.CreateScope())
+{
+    await IdentitySeeder.SeedGerantAsync(scope.ServiceProvider, builder.Configuration);
+}
 
 app.Run();
