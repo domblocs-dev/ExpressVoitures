@@ -22,7 +22,13 @@ public static class IdentitySeeder
         var motDePasse = config["Gerant:MotDePasse"];
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(motDePasse))
         {
-            return;   // pas de config : on ne crée rien
+            // Le mot de passe est un secret : il doit venir des user-secrets ou d'une variable
+            // d'environnement (Gerant__MotDePasse). Sans lui, on ne crée pas le compte gérant.
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning(
+                "Compte gérant non créé : renseignez 'Gerant:MotDePasse' via user-secrets ou la variable "
+                + "d'environnement 'Gerant__MotDePasse'. Voir le README.");
+            return;
         }
 
         // 3) Créer le compte du gérant s'il n'existe pas

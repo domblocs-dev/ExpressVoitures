@@ -49,10 +49,14 @@ Règle métier de tarification : **Prix de vente = Prix d'achat + Coût des rép
 git clone https://github.com/domblocs-dev/ExpressVoitures.git
 cd ExpressVoitures
 
-# 2. Créer la base de données à partir des migrations
+# 2. Fournir le mot de passe du gérant (secret, non versionné)
+dotnet user-secrets set "Gerant:MotDePasse" "Gerant@2026" --project ExpressVoitures
+#    (ou, en alternative : variable d'environnement Gerant__MotDePasse=Gerant@2026)
+
+# 3. Créer la base de données à partir des migrations
 dotnet ef database update --project ExpressVoitures
 
-# 3. Lancer l'application (profil HTTPS)
+# 4. Lancer l'application (profil HTTPS)
 dotnet run --project ExpressVoitures --launch-profile https
 ```
 
@@ -63,18 +67,19 @@ Adaptez-la si vous utilisez une autre instance SQL Server.
 
 ## Compte gérant (démonstration)
 
-Le compte du gérant est **créé automatiquement au premier démarrage** (via un *seeder*), ainsi que
-le rôle « Gérant ». Aucune inscription n'est nécessaire.
+Le rôle « Gérant » et le compte du gérant sont **créés automatiquement au premier démarrage** (via un
+*seeder*). Aucune inscription n'est nécessaire.
 
 | Champ | Valeur |
 |-------|--------|
 | Email | `gerant@expressvoitures.fr` |
 | Mot de passe | `Gerant@2026` |
 
-> **Note de sécurité.** Ces identifiants sont fournis dans `appsettings.json` pour qu'un **prototype**
-> démarre de manière autonome. En production, le mot de passe serait injecté par une **variable
-> d'environnement** ou un coffre à secrets (`Gerant__MotDePasse`), **jamais versionné**. L'inscription
-> publique est par ailleurs désactivée : seul le gérant peut administrer le site.
+> **Note de sécurité.** Le mot de passe n'est **pas versionné** : il est fourni par les *user-secrets*
+> (développement) ou une variable d'environnement (`Gerant__MotDePasse`) — voir l'étape 2 de l'installation.
+> Ainsi, aucun secret ne figure dans le dépôt. Sans lui, le compte gérant n'est pas créé (un avertissement
+> est journalisé au démarrage). L'inscription publique est par ailleurs désactivée : seul le gérant peut
+> administrer le site.
 
 ## Sécurité
 
