@@ -1,39 +1,40 @@
 # Express Voitures
 
-Prototype d'application web de gestion du stock pour la concession de voitures d'occasion **Express Voitures**.
+Application web de gestion du stock pour la concession de voitures d'occasion **Express Voitures**.
 
-Projet réalisé dans le cadre du **Projet 5** du parcours Développeur back-end .NET.
+Projet réalisé dans le cadre du **Projet 5** du parcours Développeur back-end .NET (OpenClassrooms).
 
 ## Contexte
 
 Jacques, gérant d'Express Voitures, achète des voitures aux enchères, les répare, puis les revend.
-Il souhaite une application web pour gérer son stock à la place de ses feuilles de calcul.
+Il souhaite une application web pour gérer son stock à la place de ses feuilles de calcul, et publier une
+vitrine consultable par le public.
 
-Règle métier de tarification : **Prix de vente = Prix d'achat + Coût des réparations + 500 €**.
+Règle métier de tarification : **Prix de vente = Prix d'achat + Coût des réparations + 500 €**
+(recalculé tant que la voiture n'est pas vendue, puis figé à la vente).
 
 ## Fonctionnalités
 
-- Consulter les voitures de l'inventaire (accès ouvert à tous)
-- Ajouter une voiture, modifier une annonce (photo, description)
-- Marquer une voiture comme vendue
-- Seul le gérant (authentifié) peut ajouter ou modifier ; la consultation reste publique
+**Visiteur (public, sans connexion)**
+- Consulter la vitrine des voitures (accueil en cartes)
+- Voir la fiche détaillée d'une voiture (photo, prix, caractéristiques, statut)
 
-> Statut : projet en cours de développement. L'infrastructure de données (entités + base) est en place ; le back-end et les vues sont en cours.
+**Gérant (authentifié)**
+- Ajouter, modifier, supprimer une voiture (avec téléversement de photo)
+- Gérer les réparations d'une voiture (le prix de vente se recalcule automatiquement)
+- Marquer une voiture comme vendue (renseigner la date de vente fige le prix)
+- Gérer les référentiels : marques, modèles, types de réparation (avec coût par défaut)
+- Consulter l'inventaire interne (avec prix d'achat, non visible du public)
+
+> **Statut : application complète et fonctionnelle** (back-end, front-end conforme aux maquettes, sécurité).
 
 ## Stack technique
 
 - **ASP.NET Core MVC** (.NET 8)
 - **Entity Framework Core** (approche *Code First*)
 - **SQL Server** (LocalDB en développement)
-- **ASP.NET Core Identity** (authentification et autorisation)
-
-## Modèle de données
-
-Le modèle complet (schéma relationnel, diagramme UML, détail des tables et justifications de conception) est disponible en PDF :
-
-- [docs/Modele_de_donnees_Express_Voitures.pdf](docs/Modele_de_donnees_Express_Voitures.pdf)
-
-Entités principales : `Marque`, `Modele`, `Voiture`, `Vente`, `Reparation`, `TypeReparation`.
+- **ASP.NET Core Identity** (authentification et autorisation par rôles)
+- **Bootstrap 5** (mise en page responsive)
 
 ## Prérequis
 
@@ -51,13 +52,56 @@ cd ExpressVoitures
 # 2. Créer la base de données à partir des migrations
 dotnet ef database update --project ExpressVoitures
 
-# 3. Lancer l'application
-dotnet run --project ExpressVoitures
+# 3. Lancer l'application (profil HTTPS)
+dotnet run --project ExpressVoitures --launch-profile https
 ```
 
-La chaîne de connexion par défaut (dans `ExpressVoitures/appsettings.json`) pointe vers LocalDB :
-`Server=(localdb)\mssqllocaldb;Database=aspnet-ExpressVoitures;...`
+L'application s'ouvre sur `https://localhost:7056` (ou le port indiqué dans la console).
+
+La chaîne de connexion par défaut (dans `ExpressVoitures/appsettings.json`) pointe vers LocalDB.
 Adaptez-la si vous utilisez une autre instance SQL Server.
+
+## Compte gérant (démonstration)
+
+Le compte du gérant est **créé automatiquement au premier démarrage** (via un *seeder*), ainsi que
+le rôle « Gérant ». Aucune inscription n'est nécessaire.
+
+| Champ | Valeur |
+|-------|--------|
+| Email | `gerant@expressvoitures.fr` |
+| Mot de passe | `Gerant@2026` |
+
+> **Note de sécurité.** Ces identifiants sont fournis dans `appsettings.json` pour qu'un **prototype**
+> démarre de manière autonome. En production, le mot de passe serait injecté par une **variable
+> d'environnement** ou un coffre à secrets (`Gerant__MotDePasse`), **jamais versionné**. L'inscription
+> publique est par ailleurs désactivée : seul le gérant peut administrer le site.
+
+## Sécurité
+
+- **Authentification** : ASP.NET Core Identity (mots de passe hachés, sessions, cookies).
+- **Autorisation par rôle** : `[Authorize(Roles = "Gérant")]` sur toutes les actions de création,
+  modification et suppression ; la consultation reste publique (`[AllowAnonymous]`).
+- **Anti-CSRF** : `[ValidateAntiForgeryToken]` sur chaque formulaire (POST).
+- **Téléversement de photos sécurisé** : nom de fichier généré (`Guid`, anti-traversée de chemin),
+  liste blanche d'extensions, taille maximale, contrôle du type.
+- **Validation serveur** systématique (règles métier, cohérence des dates, année 1990–courante).
+
+## Accessibilité
+
+- Langue de la page déclarée (`<html lang="fr">`).
+- **Contraste WCAG** : la teinte ambre de la maquette (contraste 2,15:1 sur blanc, non conforme) a été
+  remplacée par une variante plus foncée (5,78:1) pour le texte, tout en conservant l'identité visuelle.
+- Textes alternatifs descriptifs sur les images, libellés associés aux champs, champs obligatoires signalés.
+- Dates saisies via un sélecteur de calendrier natif.
+
+## Modèle de données
+
+Le modèle complet (schéma relationnel, diagramme, justifications de conception) est disponible en PDF :
+
+- [docs/Modele_de_donnees_Express_Voitures.pdf](docs/Modele_de_donnees_Express_Voitures.pdf)
+
+Entités : `Marque`, `Modele`, `Voiture`, `Vente` (relation 1–1 avec `Voiture`), `Reparation`
+(entité d'association), `TypeReparation`.
 
 ## Livrables
 
@@ -66,4 +110,4 @@ Adaptez-la si vous utilisez une autre instance SQL Server.
 
 ## Auteur
 
-Dominique - Projet 5 OpenClassrooms.
+Dominique — Projet 5 OpenClassrooms.
