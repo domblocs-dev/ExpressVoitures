@@ -80,6 +80,9 @@ Le rôle « Gérant » et le compte du gérant sont **créés automatiquement au
 > Ainsi, aucun secret ne figure dans le dépôt. Sans lui, le compte gérant n'est pas créé (un avertissement
 > est journalisé au démarrage). L'inscription publique est par ailleurs désactivée : seul le gérant peut
 > administrer le site.
+>
+> Le compte gérant est synchronisé sur ce secret au démarrage : **modifier le mot de passe et relancer
+> l'application** suffit à le changer (une modification de configuration nécessite un redémarrage).
 
 ## Sécurité
 

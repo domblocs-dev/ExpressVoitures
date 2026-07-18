@@ -44,6 +44,13 @@ public static class IdentitySeeder
             await userManager.CreateAsync(gerant, motDePasse);
         }
 
+        // 3 bis) Synchroniser le mot de passe avec le secret (s'il a changé)
+        if (!await userManager.CheckPasswordAsync(gerant, motDePasse))
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(gerant);
+            await userManager.ResetPasswordAsync(gerant, token, motDePasse);
+        }
+
         // 4) L'ajouter au rôle Gérant s'il n'y est pas déjà
         if (!await userManager.IsInRoleAsync(gerant, role))
         {
