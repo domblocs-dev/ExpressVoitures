@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace ExpressVoitures;
+namespace ExpressVoitures.Infrastructure;
 
 public class FrenchValidationMetadataProvider : IValidationMetadataProvider
 {

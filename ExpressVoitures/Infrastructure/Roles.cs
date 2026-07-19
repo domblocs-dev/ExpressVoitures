@@ -1,4 +1,4 @@
-﻿namespace ExpressVoitures;
+﻿namespace ExpressVoitures.Infrastructure;
 
 public static class Roles
 {

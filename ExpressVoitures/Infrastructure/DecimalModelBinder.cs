@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ExpressVoitures;
+namespace ExpressVoitures.Infrastructure;
 
 // Accepte le point ET la virgule comme séparateur décimal
 public class DecimalModelBinder : IModelBinder

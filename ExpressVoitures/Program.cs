@@ -1,9 +1,7 @@
-using ExpressVoitures;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using ExpressVoitures.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ExpressVoitures;
+namespace ExpressVoitures.Infrastructure;
 
 public static class IdentitySeeder
 {
