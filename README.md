@@ -76,7 +76,8 @@ Le rôle « Gérant » et le compte du gérant sont **créés automatiquement au
 | Mot de passe | `Gerant@2026` |
 
 > **Note de sécurité.** Le mot de passe n'est **pas versionné** : il est fourni par les *user-secrets*,
-> via la commande `dotnet user-secrets set "Gerant:MotDePasse" "Gerant@2026"` (dans le dossier du projet).
+> via la commande `dotnet user-secrets set "Gerant:MotDePasse" "Gerant@2026" --project ExpressVoitures`
+> (depuis la racine du dépôt).
 > Ainsi, aucun secret ne figure dans le dépôt. Sans lui, le compte gérant n'est pas créé (un avertissement
 > est journalisé au démarrage). L'inscription publique est par ailleurs désactivée : seul le gérant peut
 > administrer le site.
