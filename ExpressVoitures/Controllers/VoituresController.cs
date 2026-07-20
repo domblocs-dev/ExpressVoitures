@@ -421,7 +421,7 @@ public class VoituresController : Controller
         if (!ExtensionsAutorisees.Contains(extension))
         {
             ModelState.AddModelError(nameof(VoitureFormViewModel.Photo),
-                "Format non autorisé. Formats acceptés : JPG, PNG, WEBP.");
+                "Format non autorisé. Formats acceptés : JPG, PNG, WEBP, GIF.");
             return false;
         }
         if (!photo.ContentType.StartsWith("image/"))
