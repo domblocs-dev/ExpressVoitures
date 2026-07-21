@@ -88,8 +88,9 @@ Le rôle « Gérant » et le compte du gérant sont **créés automatiquement au
 ## Sécurité
 
 - **Authentification** : ASP.NET Core Identity (mots de passe hachés, sessions, cookies).
-- **Autorisation par rôle** : `[Authorize(Roles = "Gérant")]` sur toutes les actions de création,
-  modification et suppression ; la consultation reste publique (`[AllowAnonymous]`).
+- **Autorisation par rôle** : `[Authorize(Roles = Roles.Gerant)]` sur toutes les actions de création,
+  modification et suppression ; la consultation reste publique (`[AllowAnonymous]`). La constante
+  `Roles.Gerant` centralise le nom du rôle (valeur « Gérant »), pour éviter toute faute de frappe.
 - **Anti-CSRF** : `[ValidateAntiForgeryToken]` sur chaque formulaire (POST).
 - **Téléversement de photos sécurisé** : nom de fichier généré (`Guid`, anti-traversée de chemin),
   liste blanche d'extensions, taille maximale, contrôle du type.
